@@ -14,22 +14,35 @@ var tiles = L.tileLayer(lightStyle, {}).addTo(map);
 map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors")
 
 class SAP_Event {
-	var EventID = 0;
-	var deliveryType = "IN_PERSON";
-	var locationT = "Address";
-	var date = Date();
-	var time24 = Time();
-	
 	// delivery means format (In-Person or Virtual)
 	// location is the address of the event if it is in person, or the invitation link if online.
 	// All items in this class must be filled in. Null or tentative parameters are not permitted.
 	
-	SAP_Event(ID, delivery, location, DateObj, time24H) {
-		if (ID != null) {
-			
+	constructor(ID, delivery, locationS, date, time24H) {
+		if (ID != null && delivery != null && locationS != null && date != null && time24H != null) {
+			this.EventID = ID;
+			this.deliveryType = delivery;
+			this.locationT = locationS;
+			this.dateTime = new Date(date + ' ' + time24H);
 		}
 	}
 	
+	eventID() {
+		return this.EventID;
+	}
+	
+	type() {
+		return this.deliveryType;
+	}
+	
+    location_Str() {
+		return this.locationT;
+	}
+	
+	get_date_time() {
+		return this.dateTime;
+	}
+
 	
 }
 
@@ -112,3 +125,7 @@ function GeoCode(query) {
 
 console.log(extractDBData("https://kennyzhang620.github.io/vis_data.csv"));
 console.log(GeoCode("SAP Software Europe"))
+
+eventt = new SAP_Event(9,"IN_PERSON", "655 HOWE STREET, VANCOUVER, BC, CANADA", "1999-02-20", "10:00:00");
+
+console.log(eventt);
