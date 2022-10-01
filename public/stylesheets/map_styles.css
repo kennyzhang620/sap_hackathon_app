@@ -1,0 +1,21 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.map_container {
+    height: 100%;
+    width: 100%;
+}
+
+.map {
+    height: 90vh;
+    z-index: 0;
+}
+
+
+.Map_interface {
+    float: right;
+    width: 100%;
+}
