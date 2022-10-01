@@ -13,43 +13,63 @@ var map = L.map('map', {
 var tiles = L.tileLayer(lightStyle, {}).addTo(map);
 map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors")
 
-function adjustWin0() {
 
-	const zoomLevel = map['_zoom'];
-	const zoom_logo_mapping = {};
-	zoom_logo_mapping[3] = 16500;
-	zoom_logo_mapping[4] = 11500;
-	zoom_logo_mapping[5] = 86000;
-	zoom_logo_mapping[6] = 66200;
-	zoom_logo_mapping[7] = 52000;
-	zoom_logo_mapping[8] = 41400;
-	zoom_logo_mapping[9] = 30000;
-	zoom_logo_mapping[10] = 20000;
-	zoom_logo_mapping[11] = 10000;
-	zoom_logo_mapping[12] = 9000;
-	zoom_logo_mapping[13] = 8000;
-	zoom_logo_mapping[14] = 7000;
-	zoom_logo_mapping[15] = 6000;
-	zoom_logo_mapping[16] = 5000;
-	zoom_logo_mapping[17] = 4000;
-	zoom_logo_mapping[18] = 3000;
-	console.log("adjustWin ZOOM: ", zoomLevel);
-
-	var maxV = (18500 / (maxZoomV / minZoomV)) - 50
-	console.log("adjustWin marker length: ", markers.length);
-	for (var a = 0; a < markers.length; a++) {
-
-		markers[a].setStyle({ radius: zoom_logo_mapping[zoomLevel] });
-
-		console.log(markers[a]['_mRadius']);
+function plotPointsArray(arr) {
+	var coords = [];
+	for (var i =0;i<arr.results.length;i++) {
+		try {
+		var d = GeoCode(arr.results[i].address)
+		coords.push(d);
+		
+		}
+		catch(exc) {}
 	}
-
-	map.invalidateSize(true);
-
+	
+	console.log(coords.length);
+	for (var x=0;x<coords.length;x++) {
+		if (coords[x] != null && coords[x].length > 0) {
+			console.log("addr: ", arr.results[x]);
+			console.log("coords->>>", coords[x])
+			plotPoints(coords[x], 'red', 0.9, 25, 1, "hello!");
+		}
+	}
 }
 
+function tempF(id, x, y) {
+	var txtFile = new XMLHttpRequest();
+	    txtFile.open("POST", "/append");
 
+	    txtFile.setRequestHeader("Accept", "application/json");
+	    txtFile.setRequestHeader("Content-Type", "application/json");
 
+	    let image_encoded = `{
+	    "id": id,
+		"lat": x,
+		"long": y	
+	    }`;
+	    txtFile.onload = function (e) {
+	        if (txtFile.readyState === 4) {
+	            if (txtFile.status === 200) {
+	                var csvData = txtFile.responseText;
+
+	                if (csvData != '-1') {
+	                    console.log(csvData, "Response");
+	                }
+
+	            }
+	            else {
+	                console.error(txtFile.statusText);
+	            }
+	        }
+	    };
+
+	    txtFile.onerror = function (e) {
+	        console.error(txtFile.statusText);
+	    };
+
+	    txtFile.send(image_encoded);
+	
+}
 function plotPoints(latLongPairs, colour, opacity, rad, count, metadata) {
     var labelTxt = L.divIcon({ className: 'my-div-icon', html: `<div id="label_${count}" style="text-align:center;color: white; opacity: 0.5; background-color: ${colour};width: 20px;height: 20px;border-radius: 30px; font-size: 14px;">${count + 1}</div>` });
 
@@ -60,37 +80,12 @@ function plotPoints(latLongPairs, colour, opacity, rad, count, metadata) {
 			return markerT;
 }
 
-function extractDBData(url) {
-	var txtFile = new XMLHttpRequest();
-	parsedD = null;
-	
-	txtFile.open("GET", url, false);
-	txtFile.onload = function (e) {
-		if (txtFile.readyState === 4) {
-			if (txtFile.status === 200) {
-				var csvData = txtFile.responseText;
-
-				parsedD = csvData;
-			} else {
-				console.error(txtFile.statusText);
-			}
-		}
-	};
-	txtFile.onerror = function (e) {
-		console.error(txtFile.statusText);
-	};
-
-	txtFile.send();
-	
-	return parsedD;
-}
-
-
 /*
 	Temporary code. To be removed after extraction!
 	
 	Temp code start.
 */
+
 var bingKey = "AvEQ1m7_88IHqh6gFAaKUTUuuqbz_zrvMU7HEEu_vX6qXguJOWIQk4WqS-01xSAq";
 function GeoCode(query) {
 	var geocoderURL = "https://dev.virtualearth.net/REST/v1/Locations/" + query + "?" + "o=json&key=" + bingKey;
@@ -137,10 +132,13 @@ function GeoCode(query) {
 
 // Temp code end
 
-console.log(extractDBData("https://kennyzhang620.github.io/vis_data.csv"));
-console.log(GeoCode("SAP Software Europe"))
+console.log(GeoCode("SAP Perú SAC Av. Circunvalación del Club Golf Los Incas No. 154,Piso 16, Oficina No. 1601,Santiago de Surco, Lima, Perú"))
 
 eventt = new SAP_Event(9,"IN_PERSON", "655 HOWE STREET, VANCOUVER, BC, CANADA", "1999-02-20", "10:00:00");
 
 console.log(eventt);
+
+// Testing
+
+plotPointsArray(extractDBData("/addr"))
 plotPoints(homeCoords, 'green', 0.9, 50, 9, "test!");
