@@ -13,37 +13,51 @@ var map = L.map('map', {
 var tiles = L.tileLayer(lightStyle, {}).addTo(map);
 map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors")
 
-class SAP_Event {
-	// delivery means format (In-Person or Virtual)
-	// location is the address of the event if it is in person, or the invitation link if online.
-	// All items in this class must be filled in. Null or tentative parameters are not permitted.
-	
-	constructor(ID, delivery, locationS, date, time24H) {
-		if (ID != null && delivery != null && locationS != null && date != null && time24H != null) {
-			this.EventID = ID;
-			this.deliveryType = delivery;
-			this.locationT = locationS;
-			this.dateTime = new Date(date + ' ' + time24H);
-		}
-	}
-	
-	eventID() {
-		return this.EventID;
-	}
-	
-	type() {
-		return this.deliveryType;
-	}
-	
-    location_Str() {
-		return this.locationT;
-	}
-	
-	get_date_time() {
-		return this.dateTime;
+function adjustWin0() {
+
+	const zoomLevel = map['_zoom'];
+	const zoom_logo_mapping = {};
+	zoom_logo_mapping[3] = 16500;
+	zoom_logo_mapping[4] = 11500;
+	zoom_logo_mapping[5] = 86000;
+	zoom_logo_mapping[6] = 66200;
+	zoom_logo_mapping[7] = 52000;
+	zoom_logo_mapping[8] = 41400;
+	zoom_logo_mapping[9] = 30000;
+	zoom_logo_mapping[10] = 20000;
+	zoom_logo_mapping[11] = 10000;
+	zoom_logo_mapping[12] = 9000;
+	zoom_logo_mapping[13] = 8000;
+	zoom_logo_mapping[14] = 7000;
+	zoom_logo_mapping[15] = 6000;
+	zoom_logo_mapping[16] = 5000;
+	zoom_logo_mapping[17] = 4000;
+	zoom_logo_mapping[18] = 3000;
+	console.log("adjustWin ZOOM: ", zoomLevel);
+
+	var maxV = (18500 / (maxZoomV / minZoomV)) - 50
+	console.log("adjustWin marker length: ", markers.length);
+	for (var a = 0; a < markers.length; a++) {
+
+		markers[a].setStyle({ radius: zoom_logo_mapping[zoomLevel] });
+
+		console.log(markers[a]['_mRadius']);
 	}
 
-	
+	map.invalidateSize(true);
+
+}
+
+
+
+function plotPoints(latLongPairs, colour, opacity, rad, count, metadata) {
+    var labelTxt = L.divIcon({ className: 'my-div-icon', html: `<div id="label_${count}" style="text-align:center;color: white; opacity: 0.5; background-color: ${colour};width: 20px;height: 20px;border-radius: 30px; font-size: 14px;">${count + 1}</div>` });
+
+   			   const markerT = L.marker(latLongPairs, {
+				   icon: labelTxt, id: count
+   			}).addTo(map);
+			markerT.bindPopup(metadata);
+			return markerT;
 }
 
 function extractDBData(url) {
@@ -129,3 +143,4 @@ console.log(GeoCode("SAP Software Europe"))
 eventt = new SAP_Event(9,"IN_PERSON", "655 HOWE STREET, VANCOUVER, BC, CANADA", "1999-02-20", "10:00:00");
 
 console.log(eventt);
+plotPoints(homeCoords, 'green', 0.9, 50, 9, "test!");
