@@ -5,6 +5,7 @@ const cors = require("cors")
 const path = require('path')
 const bodyParser = require('body-parser')
 const { Pool }=require("./database")
+const { pool } = require("./dbConfig");
 const router = require("./router");
 const Storage = require("./storage");
 const storage = new Storage(Pool);
