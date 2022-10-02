@@ -19,7 +19,7 @@ function plotPointsArray(arr) {
 	var coords = [];
 	for (var i =0;i<arr.results.length;i++) {
 		try {
-			var d = GeoCode(arr.results[i].address);
+			var d = GeoCode(arr.results[i].city + ', ' + arr.results[i].state + ', ' + arr.results[i].country);
 			console.log(arr.results[i], "->",i, d);
 		tempF(arr.results[i].id, d[0], d[1]);
 		
