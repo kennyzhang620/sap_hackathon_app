@@ -42,6 +42,10 @@ function clearPoints() {
 	visibleMarkers.length = 0;
 }
 
+function shiftSet(N) {
+	
+}
+
 function search() {
 	console.log("test-click!", dmethod.value, country_m.value, state_prov_m.value, city_m.value, date_m.value);
 	indexV.innerHTML = displayLimit[0] + '-' + displayLimit[1];
