@@ -32,4 +32,25 @@ app = express();
         res.json("None.")
     }
   });
+  
+  app.get('/events', async (req, res) => {
+    try {
+        var commandstoDB = `SELECT * FROM Schedule_Event;`
+
+        const client = await pool.connect();
+        const result = await client.query(commandstoDB);
+        const data = { results: result.rows };
+
+        res.json(data);
+        status = 0;
+        client.release();
+    }
+    catch (error) {
+        console.log('X->', error);
+        status = -2;
+        res.json("None.")
+    }
+  });
+  
+  
   app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
