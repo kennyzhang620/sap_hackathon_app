@@ -1,11 +1,100 @@
 const express = require('express')
 const path = require('path')
+const bodyParser = require('body-parser')
+const { Pool }=require("./database")
+const router = require("./router");
+const Storage = require("./storage");
+const storage = new Storage(Pool);
+const { Client } = require('pg');
+
+const connectionString= "postgres://onvjuotq:ADpMvrk97ybLIUgw_uA6AM_LObaBTHal@heffalump.db.elephantsql.com/onvjuotq";
+const client = new Client({
+    connectionString: connectionString
+});
+client.connect();
+
+//router.setRoutes(app, "/events", storage);
+
 const PORT = process.env.PORT || 5000
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .get('/map', (req, res) => res.render('pages/map'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app = express()
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}))
+app.set('views', path.join(__dirname, '/views'))
+app.set('view engine', 'ejs')
+app.get('/', (req, res) => res.render('pages/calendar'))
+app.get('/map', (req, res) => res.render('pages/map'))
+
+app.get('/calendar', async(req, res) => res.render('pages/calendar'))
+app.get('/eventform', async(req, res) => res.render('pages/eventform'))
+//router.setRoutes(app, "/events", storage);
+
+app.post('/events', async(req,res)=>{
+
+  console.log(req.body);
+//res.render(console.log("found"))
+
+res.send("abc")
+/*let text= req.body.text;
+let start_date= req.body.start_date;
+let end_date=req.body.end_date;*/
+
+
+
+
+});
+
+/*app.post('/add-event', async(req, res) => {
+  var title = req.body.f_title;
+  var time = req.body.f_time;
+  var attendance = req.body.f_attendance;
+  var desc = req.body.f_desc;
+
+  var events = [];
+
+  var newEvent = {
+    title: title,
+    time: time,
+    attendance: attendance,
+    description: desc,
+  }
+
+  events.push(newEvent);
+
+  res.render('pages/calendar')
+
+  //do something
+  //render calendar
+})*/
+app.get('/init', function(req, res){
+  client.event.insert({
+      text:"My test event A",
+      start_date: new Date(2018,8,1),
+      end_date:   new Date(2018,8,5)
+  });
+  client.event.insert({
+      text:"One more test event",
+      start_date: new Date(2018,8,3),
+      end_date:   new Date(2018,8,8),
+      color: "#DD8616"
+  });
+
+  /*... skipping similar code for other test events...*/
+
+  res.send("Test events were added to the database")
+});
+
+
+app.get('/data', function(req, res){
+  client.event.find().toArray(function(err, data){
+      //set id property for all records
+      for (var i = 0; i < data.length; i++)
+          data[i].id = data[i]._id;
+
+      //output response
+      res.send(data);
+  });
+});
+
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
