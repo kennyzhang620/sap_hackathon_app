@@ -117,8 +117,7 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
 					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
 					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) {
 					console.log("YES!!!", arr.results[j]);
-					var pt = GeoCode(scheduledEvents[i].location_city() + ", " + scheduledEvents[i].location_state() + ", " + scheduledEvents[i].location_country());
-
+					var pt = [arr.results[j].xcoordinate, arr.results[j].ycoordinate]
 					var metadata = `<input type="image" src="icons/sample.jpg" style="width: 100%; height: 100%;"/> SAP Office at ${arr.results[j].address}`;
 
 					if (scheduledEvents[i].e_type() != "IN-PERSON")
@@ -194,8 +193,6 @@ function GeoCode(query) {
 }
 
 // Temp code end
-
-console.log(GeoCode("SAP Perú SAC Av. Circunvalación del Club Golf Los Incas No. 154,Piso 16, Oficina No. 1601,Santiago de Surco, Lima, Perú"))
 
 // Testing
 
