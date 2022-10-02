@@ -112,13 +112,13 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
 					typeT = true;
                 }
 
-				if (typeF && typeC
+				if ((typeF && typeC
 					&& (scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3]))
 					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
-					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) {
+					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) || j < limit) {
 					console.log("YES!!!", arr.results[j]);
 					var pt = [arr.results[j].xcoordinate, arr.results[j].ycoordinate]
-					var metadata = `<input type="image" src="icons/sample.jpg" style="width: 100%; height: 100%;"/> SAP Office at ${arr.results[j].address}`;
+					var metadata = `<a href="/calendar"><input type="image" src="icons/sample.jpg" style="width: 100%; height: 100%;"/> SAP Office at ${arr.results[j].address}</a>`;
 
 					if (scheduledEvents[i].e_type() != "IN-PERSON")
 						visibleMarkers.push(plotPoints(pt, 'green', 0.9, 300, j, metadata));
