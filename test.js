@@ -27,7 +27,7 @@ app.use(express.json());
 app.get('/map', (req, res) => res.render('pages/map'))
 app.get('/addr', async (req, res) => {
     try {
-        var commandstoDB = `SELECT address FROM sap_locations`
+        var commandstoDB = `SELECT * FROM sap_locations`
 
         const client = await pool.connect();
         const result = await client.query(commandstoDB);
@@ -47,22 +47,28 @@ app.get('/addr', async (req, res) => {
 app.post('/append', async (req,res) => {
 	
 	console.log(req.body);
-    try {
-        var commandstoDB = `INSERT INTO sap_locations (latitude, longitude) VALUES () WHERE id = ${{id}}`
+
+	if (req.body.id != null) { 
+    	try {
+        var commandstoDB = `UPDATE sap_locations SET xcoordinate = ${req.body.lat}, ycoordinate = ${req.body.long} WHERE id = ${req.body.id};`
 
         const client = await pool.connect();
         const result = await client.query(commandstoDB);
-        const data = { results: result.rows };
-
-        res.json(data);
         status = 0;
         client.release();
-    }
-    catch (error) {
+		res.send("Horray!");
+		
+    	}
+    	catch (error) {
         console.log('X->', error);
         status = -2;
         res.json("None.")
-    }
+    	}
+	}
+	else {
+	res.send("Yay?");
+}
+	
 })
 
 app.listen(PORT, () => {

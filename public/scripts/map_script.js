@@ -15,37 +15,49 @@ map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"
 
 
 function plotPointsArray(arr) {
+	console.log("XASS: ", arr);
 	var coords = [];
 	for (var i =0;i<arr.results.length;i++) {
 		try {
-		var d = GeoCode(arr.results[i].address)
-		coords.push(d);
+			var d = GeoCode(arr.results[i].address);
+			console.log(arr.results[i], "->",i, d);
+		tempF(arr.results[i].id, d[0], d[1]);
 		
 		}
-		catch(exc) {}
+		catch(exc) {
+			
+		}
 	}
 	
 	console.log(coords.length);
 	for (var x=0;x<coords.length;x++) {
-		if (coords[x] != null && coords[x].length > 0) {
-			console.log("addr: ", arr.results[x]);
-			console.log("coords->>>", coords[x])
-			plotPoints(coords[x], 'red', 0.9, 25, 1, "hello!");
-		}
+	//	if (coords[x] != null && coords[x].length > 0) {
+		//	plotPoints(coords[x], 'red', 0.9, 25, 1, "hello!");
+	//	}
 	}
 }
 
 function tempF(id, x, y) {
+	
+	console.log("da: ", id, x, y)
+	if (id == null)
+		id = "undefined";
+	
+	if (x == null)
+		x = "undefined"
+	
+	if (y == null)
+		y = "undefined";
 	var txtFile = new XMLHttpRequest();
-	    txtFile.open("POST", "/append");
+	    txtFile.open("POST", "/append", false);
 
 	    txtFile.setRequestHeader("Accept", "application/json");
 	    txtFile.setRequestHeader("Content-Type", "application/json");
 
 	    let image_encoded = `{
-	    "id": id,
-		"lat": x,
-		"long": y	
+	    "id": ${id},
+		"lat": ${x},
+		"long": ${y}	
 	    }`;
 	    txtFile.onload = function (e) {
 	        if (txtFile.readyState === 4) {
@@ -93,7 +105,6 @@ function GeoCode(query) {
 	var getLatLong = new XMLHttpRequest();
 	var coords = [];
 
-	console.log(geocoderURL);
 	getLatLong.open("GET", geocoderURL, false);
 
 	getLatLong.onload = function (e) {
