@@ -14,74 +14,16 @@ var tiles = L.tileLayer(lightStyle, {}).addTo(map);
 map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors")
 
 
-function plotPointsArray(arr) {
-	console.log("XASS: ", arr);
-	var coords = [];
-	for (var i =0;i<arr.results.length;i++) {
-		try {
-			var d = GeoCode(arr.results[i].address);
-			console.log(arr.results[i], "->",i, d);
-		tempF(arr.results[i].id, d[0], d[1]);
+function plotPointsArray(arr, limit) {
+	for (var i =0;i<limit;i++) {
+		console.log("sas: ", arr.results[i]);
 		
-		}
-		catch(exc) {
-			
-		}
+		if (arr.results[i].xcoordinate != null && arr.results[i].ycoordinate != null) {
+		plotPoints([arr.results[i].xcoordinate, arr.results[i].ycoordinate], 'red', 0.9, 30, i, "testing!");
 	}
-	
-	console.log(coords.length);
-	for (var x=0;x<coords.length;x++) {
-	//	if (coords[x] != null && coords[x].length > 0) {
-		//	plotPoints(coords[x], 'red', 0.9, 25, 1, "hello!");
-	//	}
 	}
 }
 
-function tempF(id, x, y) {
-	
-	console.log("da: ", id, x, y)
-	if (id == null)
-		id = "undefined";
-	
-	if (x == null)
-		x = "undefined"
-	
-	if (y == null)
-		y = "undefined";
-	var txtFile = new XMLHttpRequest();
-	    txtFile.open("POST", "/append", false);
-
-	    txtFile.setRequestHeader("Accept", "application/json");
-	    txtFile.setRequestHeader("Content-Type", "application/json");
-
-	    let image_encoded = `{
-	    "id": ${id},
-		"lat": ${x},
-		"long": ${y}	
-	    }`;
-	    txtFile.onload = function (e) {
-	        if (txtFile.readyState === 4) {
-	            if (txtFile.status === 200) {
-	                var csvData = txtFile.responseText;
-
-	                if (csvData != '-1') {
-	                    console.log(csvData, "Response");
-	                }
-
-	            }
-	            else {
-	                console.error(txtFile.statusText);
-	            }
-	        }
-	    };
-
-	    txtFile.onerror = function (e) {
-	        console.error(txtFile.statusText);
-	    };
-
-	    txtFile.send(image_encoded);
-	
-}
 function plotPoints(latLongPairs, colour, opacity, rad, count, metadata) {
     var labelTxt = L.divIcon({ className: 'my-div-icon', html: `<div id="label_${count}" style="text-align:center;color: white; opacity: 0.5; background-color: ${colour};width: 20px;height: 20px;border-radius: 30px; font-size: 14px;">${count + 1}</div>` });
 
@@ -151,5 +93,5 @@ console.log(eventt);
 
 // Testing
 
-plotPointsArray(extractDBData("/addr"))
+plotPointsArray(extractDBData("/addr"), 25)
 plotPoints(homeCoords, 'green', 0.9, 50, 9, "test!");

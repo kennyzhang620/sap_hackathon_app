@@ -307,16 +307,22 @@
                             <label>Date:</label>
                             <input type="datetime-local" id="date_time_m" />
 
-                            <small>Type to start searching in Real-Time!</small>
+                            <button type="button" class="btn btn-primary">Search!</button>
 
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
+        <div class="filter_options" style="z-index: 5000; background-color:white;">
+            <div class="x2" style="width: 40%; height: 50px; bottom: 60px;  background-color: white; border: 4px solid black; border-radius: 12px; z-index:5000; position:relative; display:flex;">
+                <input type="image" src="Icons/LR_Arrow.png" style="float:left; width: 40px; height: 40px;"/>
+                <div id="indicator" style="text-align: center; width: 60%;">1/20</div>
+                <input type="image" src="Icons/LR_Arrow.png" style="float:right;width: 40px; height: 40px; transform:scale(-1);" />
+            </div>
+        </div>
 
-
-    </div>
 </body>
 
 <script src="scripts/map_script.js"></script>
