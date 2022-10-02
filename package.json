@@ -1,5 +1,5 @@
 {
-  "name": "js-getting-started",
+  "name": "node-js-getting-started",
   "version": "0.3.0",
   "description": "A sample Node.js app using Express 4",
   "engines": {
@@ -11,18 +11,12 @@
     "test": "node test.js"
   },
   "dependencies": {
-    "body-parser": "^1.20.0",
-    "date-format-lite": "^17.7.0",
-    "ejs": "^3.1.5",
-    "express": "^4.18.1",
-    "express-session": "^1.17.3",
-    "nodemon": "^2.0.20",
-    "pg": "^8.8.0",
-    "util": "^0.12.4",
-    "utils": "^0.3.1",
-    "axios":"^0.27.2",
+    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "ejs": "^3.1.5",
+    "express": "^4.15.2",
+    "pg": "^8.8.0"
   },
   "devDependencies": {
     "got": "^11.3.0",
@@ -30,20 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heroku/node-js-getting-started.git"
+    "url": "https://github.com/heroku/node-js-getting-started"
   },
   "keywords": [
     "node",
     "heroku",
     "express"
   ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/heroku/node-js-getting-started/issues"
-  },
-  "homepage": "https://github.com/heroku/node-js-getting-started#readme",
-  "directories": {
-    "test": "test"
-  },
-  "author": ""
+  "license": "MIT"
 }

@@ -1,28 +1,68 @@
 <!doctype html>
 <html>
-    <head>
-        <title>DHTMLX Sсheduler example</title>
-        <meta charset="utf-8">
-        <!-- scheduler -->
-        <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"
+<head>
+    <title>DHTMLX Sсheduler example</title>
+    <meta charset="utf-8">
+    <!-- scheduler -->
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"
             charset="utf-8"></script>
-      <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
-            rel="stylesheet" type="text/css" charset="utf-8">
-        <style>
-            html, body{
-                margin:0px;
-                padding:0px;
-                height:100%;
-                overflow:hidden;
+    <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
+          rel="stylesheet" type="text/css" charset="utf-8">
+    <style>
+        html, body {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<style>
+    body {
+        font-family: "Trebuchet MS";
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+        width: 50%;
+    }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+            li a:hover {
+                background-color: #007DB8;
             }
+</style>
+<header>
+    <div>
+        <h1 style="color: #007DB8; text-align: center">myEvents</h1>
+    </div>
+    <ul>
+        <li><a href="/calendar">Calendar</a></li>
+        <li><a href="/map">Map</a></li>
+    </ul>
+</header>
 
-        </style>
-    </head>
-    <body>
+<body>
 
-      <main>
+    <main>
         <div id="scheduler_here" class="dhx_cal_container"
-            style='width:100%; height:600px;'>
+             style='width:100%; height:600px;'>
             <div class="dhx_cal_navline">
                 <div class="dhx_cal_prev_button">&nbsp;</div>
                 <div class="dhx_cal_next_button">&nbsp;</div>
@@ -35,8 +75,7 @@
             <div class="dhx_cal_header"></div>
             <div class="dhx_cal_data"></div>
         </div>
-        <script>
-            scheduler.config.load_date="%Y-%m-%d %H:%i";
+        <script>scheduler.config.load_date = "%Y-%m-%d %H:%i";
             scheduler.init("scheduler_here", new Date(), "month");
             scheduler.setLoadMode("day");
 
@@ -47,8 +86,7 @@
             const dp = scheduler.createDataProcessor({
                 url: "/events",
                 mode: "REST"
-            });
-        </script>
-      </main>
-    </body>
+            });</script>
+    </main>
+</body>
 </html>

@@ -3,7 +3,6 @@ const url = require('url')
 const axios = require('axios')
 const cors = require("cors") 
 const path = require('path')
-<<<<<<< HEAD
 const bodyParser = require('body-parser')
 const { Pool }=require("./database")
 const router = require("./router");
