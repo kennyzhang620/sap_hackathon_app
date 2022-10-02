@@ -3,10 +3,10 @@
     // location is the address of the event if it is in person, or the invitation link if online.
     // All items in this class must be filled in. Null or tentative parameters are not permitted.
 
-    constructor(ID, type, city, country, state, date, time24H) {
-        if (ID != null && type != null && city != null && country != null && state != null && date != null && time24H != null) {
+    constructor(ID, Dtype, city, country, state, date, time24H) {
+        if (ID != null && Dtype != null && city != null && country != null && state != null && date != null && time24H != null) {
             this.EventID = ID;
-            this.type = type;
+            this.Dtype = Dtype;
             this.city = city;
 			this.country = country;
 			this.state = state;
@@ -19,7 +19,7 @@
     }
 
     e_type() {
-        return this.type;
+        return this.Dtype;
     }
 
     location_city() {

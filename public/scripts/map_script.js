@@ -36,28 +36,67 @@ function Searchable(results) {
 function clearPoints() {
 	for (var x = 0; x < visibleMarkers.length; x++) {
 		map.removeLayer(visibleMarkers[x]);
+		visibleMarkers.length = 0;
 	}
 }
 
 function search() {
-	console.log("test-click!", dmethod.value, countrym.value, state_prov_m.value, city_m, date_m);
-
-
+	console.log("test-click!", dmethod.value, country_m.value, state_prov_m.value, city_m.value, date_m.value);
+	clearPoints();
+	plotPointsArray(locationEntries, displayLimit[0], displayLimit[1], [dmethod.value, country_m.value, state_prov_m.value, city_m.value, date_m.value]);
 }
 
 function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type, country, state, city, date_time(as DT)]
-	for (var i =min;i<limit;i++) {
-	//	console.log("sas: ", arr.results[i]);
-		if (arr.results[i].xcoordinate != null && arr.results[i].ycoordinate != null) {
-			if ( scheduledEvents[i].e_type().includes(searchField[0]) && scheduledEvents[i].location_country().includes(searchField[1]) && scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3]) ) {
-				visibleMarkers.push(plotPoints([arr.results[i].xcoordinate, arr.results[i].ycoordinate], 'red', 0.9, 30, i, "testing!"));
+	if (limit > scheduledEvents.length)
+		limit = scheduledEvents.length;
+
+	for (var i = min; i < limit; i++) {
+		console.log("sas: ", scheduledEvents[0]);
+		for (var j = 0; j < arr.results.length; j++) {
+
+			var typeF = false;
+			var typeC = false;
+
+			if (searchField[0] == 'Any') {
+				typeF = true;
+			}
+			else {
+				typeF = scheduledEvents[i].e_type().includes(searchField[0])
+			}
+
+			if (searchField[1] == 'ALL_C') {
+				typeC = true;
+			}
+			else {
+				typeC = scheduledEvents[i].location_country().includes(searchField[1])
+			}
+
+			if (arr.results[j].xcoordinate != null && arr.results[j].ycoordinate != null) {
+				console.log("tst: ", scheduledEvents[i], typeF, typeC
+					, scheduledEvents[i].location_state().includes(searchField[2]) ,scheduledEvents[i].location_city().includes(searchField[3])
+					, arr.results[j].city ,scheduledEvents[i].location_city() , arr.results[j].country , scheduledEvents[i].location_country()
+					, arr.results[j].state, scheduledEvents[i].location_state())
+
+				if (typeF && typeC
+					&& scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3])
+					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
+					&& arr.results[j].state == scheduledEvents[i].location_state()) {
+					console.log("YES!!!", arr.results[j]);
+					var pt = GeoCode(scheduledEvents[i].location_city() + ", " + scheduledEvents[i].location_state() + ", " + scheduledEvents[i].location_country());
+
+					console.log("PTS: ", pt)
+					visibleMarkers.push(plotPoints(pt, 'black', 0.9, 300, j, "testing!"));
+				}
 			}
 		}
+
+		
 	}
 }
 
 function plotPoints(latLongPairs, colour, opacity, rad, count, metadata) {
-    var labelTxt = L.divIcon({ className: 'my-div-icon', html: `<div id="label_${count}" style="text-align:center;color: white; opacity: 0.5; background-color: ${colour};width: 20px;height: 20px;border-radius: 30px; font-size: 14px;">${count + 1}</div>` });
+	console.log("LL: ", latLongPairs)
+    var labelTxt = L.divIcon({ className: 'my-div-icon', html: `<div id="label_${count}" style="text-align:center;color: white; opacity: ${opacity}; background-color: ${colour};width: 20px;height: 20px;border-radius: 30px; font-size: 14px;">${count + 1}</div>` });
 
    			   const markerT = L.marker(latLongPairs, {
 				   icon: labelTxt, id: count
@@ -130,7 +169,6 @@ locationEntries = extractDBData("/addr");
 Searchable(extractDBData("/events"));
 
 console.log("A_>", scheduledEvents[0].eventID());
-plotPointsArray(locationEntries, 0, 25)
-plotPoints(homeCoords, 'green', 0.9, 50, 9, "test!");
-
+search();
 console.log("sch: ", scheduledEvents);
+
