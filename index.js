@@ -119,13 +119,6 @@ app.get('/data', function(req, res){
   });
 });
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-=======
-const { pool } = require("./dbConfig");
-
-const PORT = process.env.PORT || 5000
-
-app = express();
   app.use(express.static(path.join(__dirname, 'public')))
   app.set('views', path.join(__dirname, 'views'))
   app.set('view engine', 'ejs')
@@ -172,4 +165,3 @@ app = express();
   
   
   app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
->>>>>>> map_branch
