@@ -1,60 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    <head>
+        <title>DHTMLX Sсheduler example</title>
+        <meta charset="utf-8">
+        <!-- scheduler -->
+        <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"
+            charset="utf-8"></script>
+      <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
+            rel="stylesheet" type="text/css" charset="utf-8">
+        <style>
+            html, body{
+                margin:0px;
+                padding:0px;
+                height:100%;
+                overflow:hidden;
+            }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>myEvents</title>
-  <link href="/stylesheets/calendar_styles.css" rel="stylesheet" type="text/css" />
-</head>
+        </style>
+    </head>
+    <body>
 
-<body>
+      <main>
+        <div id="scheduler_here" class="dhx_cal_container"
+            style='width:100%; height:600px;'>
+            <div class="dhx_cal_navline">
+                <div class="dhx_cal_prev_button">&nbsp;</div>
+                <div class="dhx_cal_next_button">&nbsp;</div>
+                <div class="dhx_cal_today_button"></div>
+                <div class="dhx_cal_date"></div>
+                <div class="dhx_cal_tab" name="day_tab"></div>
+                <div class="dhx_cal_tab" name="week_tab"></div>
+                <div class="dhx_cal_tab" name="month_tab"></div>
+            </div>
+            <div class="dhx_cal_header"></div>
+            <div class="dhx_cal_data"></div>
+        </div>
+        <script>
+            scheduler.config.load_date="%Y-%m-%d %H:%i";
+            scheduler.init("scheduler_here", new Date(), "month");
+            scheduler.setLoadMode("day");
 
-	<main>
-		<div id="container">
-			<div id="header">
-				<div id="monthDisplay"></div>
+            // load data from backend
+            scheduler.load("/events", "json");
 
-				<div>
-					<button id="backButton">Back</button>
-					<button id="nextButton">Next</button>
-          <button onclick="window.location.href='/eventform'">Add Event</button>
-				</div>
-			</div>
-
-			<div id="weekdays">
-				<div>Sunday</div>
-				<div>Monday</div>
-				<div>Tuesday</div>
-				<div>Wednesday</div>
-				<div>Thursday</div>
-				<div>Friday</div>
-				<div>Saturday</div>
-			</div>
-
-			<div id="calendar"></div>
-
-			<div id="newEventModal">
-				<h2>New Event</h2>
-				<input id="eventTitleInput" placeholder="Event Title" />
-				<button id="saveButton">Save</button>
-				<button id="cancelButton">Cancel</button>
-			</div>
-
-			<div id="deleteEventModal">
-				<h2>Event</h2>
-				<p id="eventText"></p>
-				<button id="deleteButton">Delete</button>
-				<button id="closeButton">Close</button>
-			</div>
-
-			<div id="modalBackDrop"></div>
-
-
-		</div>
-	</main>
-
-	<script src="/scripts/calendar_script.js"></script>
-</body>
-
+            // connect backend to scheduler
+            const dp = scheduler.createDataProcessor({
+                url: "/events",
+                mode: "REST"
+            });
+        </script>
+      </main>
+    </body>
 </html>
