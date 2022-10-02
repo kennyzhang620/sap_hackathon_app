@@ -43,7 +43,24 @@ function clearPoints() {
 }
 
 function shiftSet(N) {
-	
+	if (N == 0) {
+		if (displayLimit[0] > 0 && displayLimit[1] > 20) {
+			displayLimit[0] -= 20;
+			displayLimit[1] -= 20;
+
+			search();
+        }
+	}
+
+	if (N == 1) {
+		if (displayLimit[0] < scheduledEvents.length && displayLimit[1] < scheduledEvents.length) {
+			displayLimit[0] += 20;
+			displayLimit[1] += 20;
+
+			search();
+		}
+	}
+
 }
 
 function search() {
@@ -96,7 +113,7 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
                 }
 
 				if (typeF && typeC
-					&& scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3])
+					&& (scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3]))
 					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
 					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) {
 					console.log("YES!!!", arr.results[j]);
