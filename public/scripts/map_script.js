@@ -14,6 +14,7 @@ const country_m = document.getElementById('country_m');
 const state_prov_m = document.getElementById('state_prov_m');
 const city_m = document.getElementById('city_m');
 const date_m = document.getElementById('date_time_m');
+const indexV = document.getElementById('indicator');
 
 var map = L.map('map', {
     minZoom: minZoomV,
@@ -36,12 +37,14 @@ function Searchable(results) {
 function clearPoints() {
 	for (var x = 0; x < visibleMarkers.length; x++) {
 		map.removeLayer(visibleMarkers[x]);
-		visibleMarkers.length = 0;
 	}
+
+	visibleMarkers.length = 0;
 }
 
 function search() {
 	console.log("test-click!", dmethod.value, country_m.value, state_prov_m.value, city_m.value, date_m.value);
+	indexV.innerHTML = displayLimit[0] + '-' + displayLimit[1];
 	clearPoints();
 	plotPointsArray(locationEntries, displayLimit[0], displayLimit[1], [dmethod.value, country_m.value, state_prov_m.value, city_m.value, date_m.value]);
 }
@@ -57,35 +60,50 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
 			var typeF = false;
 			var typeC = false;
 
-			if (searchField[0] == 'Any') {
-				typeF = true;
-			}
-			else {
-				typeF = scheduledEvents[i].e_type().includes(searchField[0])
-			}
-
-			if (searchField[1] == 'ALL_C') {
-				typeC = true;
-			}
-			else {
-				typeC = scheduledEvents[i].location_country().includes(searchField[1])
-			}
+			var typeT = false;
 
 			if (arr.results[j].xcoordinate != null && arr.results[j].ycoordinate != null) {
 				console.log("tst: ", scheduledEvents[i], typeF, typeC
 					, scheduledEvents[i].location_state().includes(searchField[2]) ,scheduledEvents[i].location_city().includes(searchField[3])
-					, arr.results[j].city ,scheduledEvents[i].location_city() , arr.results[j].country , scheduledEvents[i].location_country()
+					, arr.results[j].city, scheduledEvents[i].location_city(), arr.results[j].country, scheduledEvents[i].location_country()
 					, arr.results[j].state, scheduledEvents[i].location_state())
+
+				if (searchField[0] == 'Any') {
+					typeF = true;
+				}
+				else {
+					typeF = scheduledEvents[i].e_type().includes(searchField[0])
+				}
+
+				if (searchField[1] == 'ALL_C') {
+					typeC = true;
+				}
+				else {
+					typeC = scheduledEvents[i].location_country().includes(searchField[1])
+				}
+
+				const se_gtime = new Date(date_m.value).getTime();
+
+				if (!isNaN(se_gtime)) {
+					typeT = se_gtime == scheduledEvents[i].get_date_time().getTime();
+				}
+				else {
+					typeT = true;
+                }
 
 				if (typeF && typeC
 					&& scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3])
 					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
-					&& arr.results[j].state == scheduledEvents[i].location_state()) {
+					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) {
 					console.log("YES!!!", arr.results[j]);
 					var pt = GeoCode(scheduledEvents[i].location_city() + ", " + scheduledEvents[i].location_state() + ", " + scheduledEvents[i].location_country());
 
-					console.log("PTS: ", pt)
-					visibleMarkers.push(plotPoints(pt, 'black', 0.9, 300, j, "testing!"));
+					var metadata = `<input type="image" src="icons/sample.jpg" style="width: 100%; height: 100%;"/> SAP Office at ${arr.results[j].address}`;
+
+					if (scheduledEvents[i].e_type() != "IN-PERSON")
+						visibleMarkers.push(plotPoints(pt, 'green', 0.9, 300, j, metadata));
+					else
+						visibleMarkers.push(plotPoints(pt, 'black', 0.9, 300, j, metadata));
 				}
 			}
 		}
@@ -157,10 +175,6 @@ function GeoCode(query) {
 // Temp code end
 
 console.log(GeoCode("SAP Perú SAC Av. Circunvalación del Club Golf Los Incas No. 154,Piso 16, Oficina No. 1601,Santiago de Surco, Lima, Perú"))
-
-eventt = new SAP_Event(9,"IN_PERSON","VANCOUVER", "CANADA", "BC", "1999-02-20", "10:00:00");
-
-console.log("ii:", eventt);
 
 // Testing
 
