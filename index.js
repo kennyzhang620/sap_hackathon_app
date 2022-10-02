@@ -36,14 +36,32 @@ app.post('/events', async(req,res)=>{
 //res.render(console.log("found"))
 
 res.send("abc")
-/*let text= req.body.text;
+let text= req.body.text;
 let start_date= req.body.start_date;
-let end_date=req.body.end_date;*/
+let end_date=req.body.end_date;
+console.log(text,start_date,end_date);
 
+client.query(`SELECT * FROM events WHERE start_date=$1 OR end_date=$2`,[start_date, end_date],(err,results)=>{
+  if (err){
+    throw err;
+  }
 
+  else{
+    client.query(`INSERT INTO events (text,start_date,end_date) VALUES ($1,$2,$3)`,
+    [text, start_date, end_date],(err,results)=>{
+     if(err){
+       throw err;
+     }
+     console.log(results.rows);
+    })
+  }
 
-
+})
 });
+
+
+
+
 
 /*app.post('/add-event', async(req, res) => {
   var title = req.body.f_title;
@@ -70,13 +88,13 @@ let end_date=req.body.end_date;*/
 app.get('/init', function(req, res){
   client.event.insert({
       text:"My test event A",
-      start_date: new Date(2018,8,1),
-      end_date:   new Date(2018,8,5)
+      start_date: new Date(),
+      end_date:   new Date()
   });
   client.event.insert({
       text:"One more test event",
-      start_date: new Date(2018,8,3),
-      end_date:   new Date(2018,8,8),
+      start_date: new Date(),
+      end_date:   new Date(),
       color: "#DD8616"
   });
 
