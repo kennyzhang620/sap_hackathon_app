@@ -1,13 +1,16 @@
 const express = require("express");
 const app = express();
+const url = require('url')
+const axios = require('axios')
+const cors = require("cors") 
 const { pool } = require("./dbConfig");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const flash =require("express-flash");
 const passport = require("passport");
-const cors = require("cors") //cross-origin resource sharing
-const axios = require('axios')
-const url = require('url')
+//cross-origin resource sharing
+
+
 
 const globalAPIKey = "dQovNOSOTUaNoNZcs6Yvon0WyjM6JeULJSAbL2effgzxknVhAh"; 
 

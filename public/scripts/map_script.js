@@ -9,6 +9,12 @@ var dLimitIncrement = 20
 var locationEntries = []
 var scheduledEvents = []
 
+const dmethod = document.getElementById('delivery_m');
+const country_m = document.getElementById('country_m');
+const state_prov_m = document.getElementById('state_prov_m');
+const city_m = document.getElementById('city_m');
+const date_m = document.getElementById('date_time_m');
+
 var map = L.map('map', {
     minZoom: minZoomV,
     maxZoom: maxZoomV,
@@ -33,16 +39,20 @@ function clearPoints() {
 	}
 }
 
+function search() {
+	console.log("test-click!", dmethod.value, countrym.value, state_prov_m.value, city_m, date_m);
+
+
+}
+
 function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type, country, state, city, date_time(as DT)]
 	for (var i =min;i<limit;i++) {
 	//	console.log("sas: ", arr.results[i]);
-		
 		if (arr.results[i].xcoordinate != null && arr.results[i].ycoordinate != null) {
-			if () {
-				
+			if ( scheduledEvents[i].e_type().includes(searchField[0]) && scheduledEvents[i].location_country().includes(searchField[1]) && scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3]) ) {
+				visibleMarkers.push(plotPoints([arr.results[i].xcoordinate, arr.results[i].ycoordinate], 'red', 0.9, 30, i, "testing!"));
 			}
-		visibleMarkers.push(plotPoints([arr.results[i].xcoordinate, arr.results[i].ycoordinate], 'red', 0.9, 30, i, "testing!"));
-	}
+		}
 	}
 }
 
@@ -118,6 +128,8 @@ console.log("ii:", eventt);
 locationEntries = extractDBData("/addr");
 
 Searchable(extractDBData("/events"));
+
+console.log("A_>", scheduledEvents[0].eventID());
 plotPointsArray(locationEntries, 0, 25)
 plotPoints(homeCoords, 'green', 0.9, 50, 9, "test!");
 

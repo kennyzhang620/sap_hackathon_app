@@ -18,7 +18,7 @@
         return this.EventID;
     }
 
-    type() {
+    e_type() {
         return this.type;
     }
 
