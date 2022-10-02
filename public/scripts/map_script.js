@@ -100,7 +100,7 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
 					typeC = true;
 				}
 				else {
-					typeC = scheduledEvents[i].location_country().includes(searchField[1])
+					typeC = arr.results[j].country.includes(searchField[1])
 				}
 
 				const se_gtime = new Date(date_m.value).getTime();
@@ -113,9 +113,8 @@ function plotPointsArray(arr, min, limit, searchField) { // SearchField = [type,
                 }
 
 				if ((typeF && typeC
-					&& (scheduledEvents[i].location_state().includes(searchField[2]) && scheduledEvents[i].location_city().includes(searchField[3]))
-					&& arr.results[j].city == scheduledEvents[i].location_city() && arr.results[j].country == scheduledEvents[i].location_country()
-					&& arr.results[j].state == scheduledEvents[i].location_state() && typeT) || j < limit) {
+					&& (arr.results[j].state.includes(searchField[2]) && arr.results[j].city.includes(searchField[3]))
+					&& typeT) && j < 40) {
 					console.log("YES!!!", arr.results[j]);
 					var pt = [arr.results[j].xcoordinate, arr.results[j].ycoordinate]
 					var metadata = `<a href="/calendar"><input type="image" src="icons/sample.jpg" style="width: 100%; height: 100%;"/> SAP Office at ${arr.results[j].address}</a>`;
